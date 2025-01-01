@@ -26,7 +26,7 @@ public class CustomerController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+    public ResponseEntity<CustomerResponse> updateCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

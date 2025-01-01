@@ -24,24 +24,6 @@ public class CustomerServiceImpl implements CustomerService {
     private ModelMapper modelMapper;
     private CustomerRepository customerRepository;
 
-//    @Override
-//    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-//        Customer newCustomer = modelMapper.map(customerDTO, Customer.class);
-//        Customer existingCustomerByEmail = customerRepository.findCustomerByEmail(newCustomer.getEmail()).orElse(null);
-//        if (existingCustomerByEmail != null) {
-//            throw new APIException("Customer with email " + existingCustomerByEmail + " already exists");
-//        }
-//        Customer createdCustomer = customerRepository.save(newCustomer);
-//        return modelMapper.map(createdCustomer, CustomerDTO.class);
-//    }
-
-//    @Override
-//    public CustomerDTO createCustomer(@Valid CustomerRequest customerDTO) {
-//        Customer newCustomer = modelMapper.map(customerDTO, Customer.class);
-//        Customer createdCustomer = customerRepository.save(newCustomer);
-//        return modelMapper.map(createdCustomer, CustomerDTO.class);
-//    }
-
     @Override
     public CustomerResponse createCustomer(@Valid CustomerRequest customerRequest) {
         Customer newCustomer = modelMapper.map(customerRequest, Customer.class);
@@ -50,12 +32,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomer(CustomerRequest customerRequest) {
+    public CustomerResponse updateCustomer(CustomerRequest customerRequest) {
         Customer existingCustomer = customerRepository.findById(customerRequest.id())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerRequest.id()));
-
-        modelMapper.map(customerRequest, existingCustomer);
-        customerRepository.save(existingCustomer);
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+        return modelMapper.map(updatedCustomer, CustomerResponse.class);
     }
 
     @Override
